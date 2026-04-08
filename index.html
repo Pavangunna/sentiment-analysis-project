@@ -1,181 +1,83 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
-
 <html>
 <head>
     <title>Sentiment Analysis</title>
 
-```
-<style>
-    body {
-        font-family: Arial;
-        background: #f4f6f8;
-        text-align: center;
-        padding: 40px;
-    }
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f8;
+            text-align: center;
+            padding: 40px;
+        }
 
-    h1 {
-        color: #333;
-    }
+        h1 {
+            color: #333;
+        }
 
-    textarea {
-        width: 60%;
-        height: 120px;
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-    }
+        textarea {
+            width: 60%;
+            height: 120px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
 
-    button {
-        margin-top: 15px;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 8px;
-        border: none;
-        background: #007BFF;
-        color: white;
-        cursor: pointer;
-    }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
 
-    button:hover {
-        background: #0056b3;
-    }
+        button:hover {
+            background: #0056b3;
+        }
 
-    .result {
-        margin-top: 30px;
-        font-size: 24px;
-        font-weight: bold;
-    }
+        .result {
+            margin-top: 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
 
-    .positive { color: green; }
-    .negative { color: red; }
-    .neutral { color: gray; }
-</style>
-```
-
+        .positive { color: green; }
+        .negative { color: red; }
+        .neutral { color: gray; }
+    </style>
 </head>
 
 <body>
 
-```
-<h1>💬 Sentiment Analysis App</h1>
+    <h1>💬 Sentiment Analysis App</h1>
 
-<form method="POST">
-    <textarea name="text" placeholder="Type your sentence here..."></textarea><br>
-    <button type="submit">Analyze</button>
-</form>
+    <form method="POST">
+        <textarea name="text" placeholder="Type your sentence here..."></textarea><br>
+        <button type="submit">Analyze</button>
+    </form>
 
-{% if result %}
-    <div class="result 
-        {% if result == 'Positive' %}positive
-        {% elif result == 'Negative' %}negative
-        {% else %}neutral
-        {% endif %}
-    ">
-        
-        {% if result == 'Positive' %}
-            😊 Positive
-        {% elif result == 'Negative' %}
-            😡 Negative
-        {% else %}
-            😐 Neutral
-        {% endif %}
-        
-    </div>
-{% endif %}
-```
+    {% if result %}
+        <div class="result 
+            {% if result == 'Positive' %}positive
+            {% elif result == 'Negative' %}negative
+            {% else %}neutral
+            {% endif %}
+        ">
+            
+            {% if result == 'Positive' %}
+                😊 Positive
+            {% elif result == 'Negative' %}
+                😡 Negative
+            {% else %}
+                😐 Neutral
+            {% endif %}
+            
+        </div>
+    {% endif %}
 
 </body>
 </html>
-=======
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Sentiment Analysis</title>
-
-```
-<style>
-    body {
-        font-family: Arial;
-        background: #f4f6f8;
-        text-align: center;
-        padding: 40px;
-    }
-
-    h1 {
-        color: #333;
-    }
-
-    textarea {
-        width: 60%;
-        height: 120px;
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-    }
-
-    button {
-        margin-top: 15px;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 8px;
-        border: none;
-        background: #007BFF;
-        color: white;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background: #0056b3;
-    }
-
-    .result {
-        margin-top: 30px;
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    .positive { color: green; }
-    .negative { color: red; }
-    .neutral { color: gray; }
-</style>
-```
-
-</head>
-
-<body>
-
-```
-<h1>💬 Sentiment Analysis App</h1>
-
-<form method="POST">
-    <textarea name="text" placeholder="Type your sentence here..."></textarea><br>
-    <button type="submit">Analyze</button>
-</form>
-
-{% if result %}
-    <div class="result 
-        {% if result == 'Positive' %}positive
-        {% elif result == 'Negative' %}negative
-        {% else %}neutral
-        {% endif %}
-    ">
-        
-        {% if result == 'Positive' %}
-            😊 Positive
-        {% elif result == 'Negative' %}
-            😡 Negative
-        {% else %}
-            😐 Neutral
-        {% endif %}
-        
-    </div>
-{% endif %}
-```
-
-</body>
-</html>
->>>>>>> 090901c24c93217837a1d171e1357cd69b3f5922
