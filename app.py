@@ -5,44 +5,48 @@ import os
 import json
 import h5py
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Embedding, LSTM, Dense, Dropout, Bidirectional
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
-def load_model_safe(path):
+def normalize_config(obj):
     """
-    Keras 3.x saves quantization_config in layer configs which older and newer
-    Keras both reject. This strips all unknown keys before deserializing, then
-    loads the weights separately.
+    Recursively normalize a Keras 3.x model config so Keras 2.x can load it.
+    Handles:
+      - quantization_config, optional, module, registered_name  → strip
+      - dtype as DTypePolicy dict                               → flatten to string
+      - batch_shape                                             → batch_input_shape
     """
-    STRIP_KEYS = {"quantization_config", "optional", "module", "registered_name"}
+    if isinstance(obj, list):
+        return [normalize_config(i) for i in obj]
 
-    def clean(obj):
-        if isinstance(obj, dict):
-            return {k: clean(v) for k, v in obj.items() if k not in STRIP_KEYS}
-        if isinstance(obj, list):
-            return [clean(i) for i in obj]
+    if not isinstance(obj, dict):
         return obj
 
+    # Flatten dtype: {'class_name': 'DTypePolicy', 'config': {'name': 'float32'}} → 'float32'
+    if obj.get("class_name") == "DTypePolicy":
+        return obj.get("config", {}).get("name", "float32")
+
+    STRIP = {"quantization_config", "optional", "module", "registered_name"}
+    result = {}
+    for k, v in obj.items():
+        if k in STRIP:
+            continue
+        result[k] = normalize_config(v)
+
+    # Fix InputLayer batch_shape → batch_input_shape
+    if result.get("class_name") == "InputLayer":
+        cfg = result.get("config", {})
+        if "batch_shape" in cfg:
+            cfg["batch_input_shape"] = cfg.pop("batch_shape")
+
+    return result
+
+
+def load_model_safe(path):
     with h5py.File(path, "r") as f:
         raw_config = json.loads(f.attrs["model_config"])
 
-    clean_config = clean(raw_config)
-
-    # Fix batch_shape → batch_input_shape for any InputLayer
-    def fix_input(obj):
-        if isinstance(obj, dict):
-            if obj.get("class_name") == "InputLayer" and "batch_shape" in obj.get("config", {}):
-                obj["config"]["batch_input_shape"] = obj["config"].pop("batch_shape")
-            for v in obj.values():
-                fix_input(v)
-        elif isinstance(obj, list):
-            for i in obj:
-                fix_input(i)
-
-    fix_input(clean_config)
-
+    clean_config = normalize_config(raw_config)
     model = tf.keras.models.model_from_json(json.dumps(clean_config))
     model.load_weights(path)
     return model
@@ -58,7 +62,6 @@ with open("label_encoder.pkl", "rb") as f:
 
 app = Flask(__name__)
 maxlen = 100
-
 label_map = {0: "Negative", 1: "Neutral", 2: "Positive", 3: "Irrelevant"}
 
 
